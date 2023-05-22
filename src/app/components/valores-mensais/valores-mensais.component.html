@@ -1,0 +1,93 @@
+<div class="componente-container">
+
+  <div>
+
+    <mat-form-field>
+      <mat-label>FILTRO</mat-label>
+      <mat-select [(ngModel)]="selectedCliente" name="food">
+        <mat-option>Nenhum</mat-option>
+        <mat-option *ngFor="let sel of selected" [value]="sel.chave">
+          {{sel.valor}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <p> Cliente Selecionado: {{selectedCliente}} </p>
+
+    <button mat-raised-button color="primary" (click)="fetchValoresMensaisInfraestrutura()">Buscar</button>
+
+<!--
+    <mat-form-field>
+      <input matInput [matDatePicker]="DtCompetencia" placeholder="Data Competência" [(ngModel)]="filtroDtCompetencia">
+      <mat-datepicker-toggle matSuffix [for]="pickerDtCompetencia"></mat-datepicker-toggle>
+      <mat-datepicker #pickerDtCompetencia></mat-datepicker>
+    </mat-form-field>
+  
+    <mat-form-field>
+      <input matInput [matDatePicker]="pickerRange" placeholder="Data Competência" [rangeFilter]="dateFilter">
+      <mat-datepicker-toggle matSuffix [for]="pickerRange"></mat-datepicker-toggle>
+      <mat-datepicker #pickerRange></mat-datepicker>
+    </mat-form-field>
+
+
+-->    
+
+  </div>
+
+    <table mat-table [dataSource]="valoresMensais">
+        
+        <ng-container matColumnDef="nomeCliente">
+          <th mat-header-cell *matHeaderCellDef> Nome </th>
+          <td mat-cell *matCellDef="let valorMen"> {{ valorMen.Cliente?.nomeCliente }} </td>
+        </ng-container>
+        <ng-container matColumnDef="dtCompetencia"> 
+          <th mat-header-cell *matHeaderCellDef> Data da Competência </th>
+          <td mat-cell *matCellDef="let valorMen"> {{ valorMen.dtCompetencia }} </td>
+        </ng-container>
+<!--       <ng-container matColumnDef="cdServico">
+            <th mat-header-cell *matHeaderCellDef> Código Serviço </th>
+            <td mat-cell *matCellDef="let valoresMen"> {{ valoresMen.cdServico }} </td>
+          </ng-container>
+-->
+          <ng-container matColumnDef="descServicos">
+            <th mat-header-cell *matHeaderCellDef> Serviço </th>
+            <td mat-cell *matCellDef="let valoresMen"> {{ valoresMen.Servico?.descServicos }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="qtdServico">
+            <th mat-header-cell *matHeaderCellDef> QTD Serviço </th>
+            <td mat-cell *matCellDef="let valoresMen"> {{ valoresMen.qtdServico }} </td>
+          </ng-container>
+          <ng-container matColumnDef="valorServico">
+            <th mat-header-cell *matHeaderCellDef> Valor </th>
+            <td mat-cell *matCellDef="let valoresMen"> {{ valoresMen.valorServico }} </td>
+          </ng-container>
+          <ng-container matColumnDef="qtdDesc">
+            <th mat-header-cell *matHeaderCellDef> QTD Desconto </th>
+            <td mat-cell *matCellDef="let valoresMen"> {{ valoresMen.qtdDesc }} </td>
+          </ng-container>
+          <ng-container matColumnDef="valorDesc">
+            <th mat-header-cell *matHeaderCellDef> Valor Desconto </th>
+            <td mat-cell *matCellDef="let valoresMen"> {{ valoresMen.valorDesc }} </td>
+          </ng-container>
+          <ng-container matColumnDef="dtcarga">
+            <th mat-header-cell *matHeaderCellDef> Data Carga </th>
+            <td mat-cell *matCellDef="let valoresMen"> {{ valoresMen.dtcarga }} </td>
+          </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+     
+    </table>
+       
+    <mat-paginator [length]="pagination?.total || 0"
+            [pageIndex]="pageIndex"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="onPageChange($event)"
+            #paginator
+            aria-label="Select page">
+            <mat-select [value]="pageSizeOptionsModel" (selectionChange)="onPageSizeChange($event.value)">
+            <mat-option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</mat-option>
+            </mat-select>
+    </mat-paginator>
+  </div>

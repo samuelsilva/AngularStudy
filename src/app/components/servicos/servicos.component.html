@@ -1,0 +1,47 @@
+<!--
+<div class="container">
+    <h1>Serviços</h1>
+    
+    <table class="table table-bordered">
+      <tr>
+        <th>ID</th>
+        <th>Nome Serviços</th>
+      </tr>
+      <tr *ngFor="let servico of servicos">
+        <td>{{ servico.cdServicos }}</td>
+        <td>{{ servico.descServicos }}</td>
+      </tr>
+    </table>
+  </div>
+-->
+  <div class="componente-container">
+  
+    <table mat-table [dataSource]="servicos">
+        
+        <ng-container matColumnDef="cdServicos">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let servico"> {{servico.cdServicos}} </td>
+        </ng-container>
+        <ng-container matColumnDef="descServicos">
+          <th mat-header-cell *matHeaderCellDef> Nome </th>
+          <td mat-cell *matCellDef="let servico"> {{servico.descServicos}} </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+     
+    </table>
+    
+    <mat-paginator [length]="pagination?.total || 0"
+        [pageIndex]="pageIndex"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        #paginator
+        aria-label="Select page">
+        <mat-select [value]="pageSizeOptionsModel" (selectionChange)="onPageSizeChange($event.value)">
+          <mat-option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</mat-option>
+        </mat-select>
+    </mat-paginator>
+  </div>
+  

@@ -1,0 +1,53 @@
+<!--
+<div class="container">
+    <h1>Clientes</h1>
+    
+    <table class="table table-bordered">
+      <tr>
+        <th>ID</th>
+        <th>Cliente</th>
+        <th>Referência Passada</th>
+      </tr>
+      <tr *ngFor="let client of clientes">
+        <td>{{ client.nrCliente }}</td>
+        <td>{{ client.nomeCliente }}</td>
+        <td>{{ client.refPassada }}</td>
+      </tr>
+    </table>
+  </div>
+-->
+<div class="componente-container">
+  
+  <table mat-table [dataSource]="clientes">
+      
+      <ng-container matColumnDef="nrCliente">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let client"> {{client.nrCliente}} </td>
+      </ng-container>
+      <ng-container matColumnDef="nomeCliente">
+        <th mat-header-cell *matHeaderCellDef> Nome </th>
+        <td mat-cell *matCellDef="let client"> {{client.nomeCliente}} </td>
+      </ng-container>
+      <ng-container matColumnDef="refPassada">
+        <th mat-header-cell *matHeaderCellDef> Referência Passada </th>
+        <td mat-cell *matCellDef="let client"> {{ client.refPassada }} </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+   
+    </table>
+    
+    <mat-paginator [length]="pagination?.total || 0"
+              [pageIndex]="pageIndex"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="pageSizeOptions"
+              (page)="onPageChange($event)"
+              #paginator
+              aria-label="Select page">
+              <mat-select [value]="pageSizeOptionsModel" (selectionChange)="onPageSizeChange($event.value)">
+                <mat-option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</mat-option>
+              </mat-select>
+    </mat-paginator>
+    
+</div>

@@ -1,16 +1,60 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
+import { BootstrapComponent } from './components/bootstrap/bootstrap.component';
+import { ClienteService } from './services/cliente.service';
+import { ClientesComponent } from './components/clientes/clientes.component';
+import { ServicosComponent } from './components/servicos/servicos.component';
+import { ServicosService } from './services/servicos.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MainNavComponent } from './main-nav/main-nav.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormsModule } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
+
+import { HomeComponent } from './home/home.component';
+import { ValoresMensaisComponent } from './components/valores-mensais/valores-mensais.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BootstrapComponent,
+    ClientesComponent,
+    ServicosComponent,
+    MainNavComponent,
+    HomeComponent,
+    ValoresMensaisComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [ClienteService,ServicosService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
