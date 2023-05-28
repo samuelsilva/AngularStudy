@@ -5,6 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { FormControl } from '@angular/forms';
 import { ClienteService } from 'src/app/services/cliente.service';
+import { ServicosService } from 'src/app/services/servicos.service';
 
 @Component({
   selector: 'app-valores-mensais',
@@ -22,13 +23,21 @@ export class ValoresMensaisComponent {
 
   // variaveis pro filtro
   nrCliente: number | null = null; // número pra teste
+  cdServico: number | null = null;
 
-
-  // variáveis de campos pro filtro
+  // variáveis de campos pro filtro de Clientes
   selectedValue: string | null = null;
   selectedCliente: string | null = null;
   selected: any;
   
+  // variáveis de campos pro filtro de Serviços
+  selectedServicosValue: string | null = null;
+  selectedServicosName: string | null = null;
+  selectedServicos: any;
+
+  // variáveis de campos pro filtro de datas
+  selectedDtCompetenciaMin: Date | null = null; // 2023-02-28
+  selectedDtCompetenciaMax: Date | null = null;
 
   // colunas da tabela que serão mostradas
   displayedColumns: string[] = ['nomeCliente', 'dtCompetencia', 'descServicos', 'qtdServico', 'valorServico', 'qtdDesc', 'valorDesc', 'dtcarga'];
@@ -36,57 +45,77 @@ export class ValoresMensaisComponent {
   // Para fazer o range das datas
   filtroDtCompetencia = new FormControl();
 
-  // Construtor pra chamar o Service dos Valores Mensais
-  constructor(private api: ValoresMensaisService, private apiClientesService:ClienteService) {}
+  // Construtor pra chamar o Service dos Valores Mensais, montar o dados do filtro usando os outros Services
+  constructor(private api: ValoresMensaisService, 
+              private apiClientesService:ClienteService, 
+              private apiServicosService: ServicosService) {}
 
   ngOnInit(): void {
 //    console.log("Componente dos Valores Mensais");
     //this.componentClientesValues = this.ClientesService.getClientes(1,0);
-    //const selecionados = this.ClientesComponent.gerarValores();
+    //const selecionados = this.ClientesComponent.gerarValoresClientes();
     
     this.fetchValoresMensaisInfraestrutura();
-    this.selected = this.gerarValores();
-    console.log("SELECTED: ",this.selected);
+    this.selected = this.gerarValoresClientes();
+    this.selectedServicos = this.gerarValoresServicos();
+    console.log("SELECTED CLIENTES: ",this.selected);
+    console.log("SELECTED SERVICOS: ",this.selectedServicos);
   }
 
 
   fetchValoresMensaisInfraestrutura(): void {
-    // FILTROS DA BUSCA
+    /*
     let filters = {
-      /*dtCompetenciaMin: this.filtroDtCompetencia.value?.toISOString() || undefined,
+      dtCompetenciaMin: this.filtroDtCompetencia.value?.toISOString() || undefined,
       dtCompetenciaMax:  this.filtroDtCompetencia.value?.toISOString() || undefined, // Adicione o valor desejado aqui
       dtCarga: undefined, // Adicione o valor desejado aqui
       qtdServico: undefined, // Adicione o valor desejado aqui
-      */
-      nrCliente: undefined // Adicione o valor desejado aqui
       
+      nrCliente: undefined, // Adicione o valor desejado aqui
+      cdServico: undefined
     };
+    */
 
     let params = Object.assign({}, {
       page: this.pageIndex + 1,
       limit: this.pageSize,
     });
   
-    // Teste pra garantir que caso nada seja selecionado volte ao estado inicial da busca
+    // Teste pra garantir que caso o CLIENTE não seja selecionado volte ao estado inicial da busca
     if (this.selectedCliente && this.selectedCliente !== 'Nenhum') {
       this.nrCliente = Number(this.selectedCliente);
     } else {
       this.selectedCliente = null; // Atribui null quando "Nenhum" for selecionado
       this.nrCliente = null;
     }
-
     // Adiciona os parametros ao objeto parametro
     if (this.nrCliente !== undefined && this.nrCliente !== null) {
       Object.assign(params, {
         nrCliente: String(this.nrCliente)
       });
     }
+
+    // Teste pra garantir que caso o SERVIÇO não seja selecionado volte ao estado inicial da busca
+    if (this.selectedServicosName && this.selectedServicosName !== 'Nenhum') {
+      this.cdServico = Number(this.selectedServicosName);
+    } else {
+      this.selectedServicosName = null; // Atribui null quando "Nenhum" for selecionado
+      this.cdServico = null;
+    }
+    // Adiciona os parametros ao objeto parametro
+    if (this.cdServico !== undefined && this.cdServico !== null) {
+      Object.assign(params, {
+        cdServico: String(this.cdServico)
+      });
+    }
+
+
     this.api.getValoresMensaisInfraestrutura(params)
     .subscribe(
       response => {
         this.valoresMensais = response.valoresmensaisinfraestrutura;  
         this.pagination = response.pagination;
-//      console.log(response);
+      console.log("Retorno do fetch: ",this.valoresMensais);
       }
     );
   }
@@ -117,7 +146,8 @@ export class ValoresMensaisComponent {
     this.filtroDtCompetencia.setValue(event.value);
   }
 
-  gerarValores(): any {
+  // function to create a select for the clientes in the filter
+  gerarValoresClientes(): any {
     const selected: { chave: number; valor: string; }[] = [];
     this.apiClientesService.getClientesTotal().subscribe(response => {
  
@@ -140,5 +170,29 @@ export class ValoresMensaisComponent {
     return selected;
   }
   
+  // function to create a select for the clientes in the filter
+  gerarValoresServicos(): any {
+    const selected: { chave: number; valor: string; }[] = [];
+    this.apiServicosService.getServicosTotal().subscribe(response => {
+ 
+      for(let i = 0; i<response.servicos.length; i++) {
+ 
+        //console.log(JSON.stringify(response.clientes[i].refPassada));
+        //if(response.clientes[i].refPassada === null) {
+
+          const chave = response.servicos[i].cdServicos;
+          const valor = response.servicos[i].descServicos;
+          // Criar um objeto com a chave e valor
+          const objeto = {
+            chave: chave,
+            valor: valor
+          };
+          selected.push(objeto);
+        //}
+      }
+    });
+    return selected;
+
+  }
 
 }

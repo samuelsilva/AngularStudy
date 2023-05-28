@@ -24,4 +24,9 @@ export class ServicosService {
     return this.http.get<{servicos:Servicos[], pagination: Pagination}>(`${this.apiUrl}/servicos`, {params});    
   }
 
+  getServicosTotal(): Observable<{servicos:Servicos[], pagination: Pagination}> {
+    console.log(this.http.get<{servicos:Servicos[], pagination: Pagination}>(`${this.apiUrl}/servicos`));
+    return this.http.get<{servicos:Servicos[], pagination: Pagination}>(`${this.apiUrl}/servicos`);    
+  }
+
 }

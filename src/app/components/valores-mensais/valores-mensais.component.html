@@ -3,8 +3,8 @@
   <div>
 
     <mat-form-field>
-      <mat-label>FILTRO</mat-label>
-      <mat-select [(ngModel)]="selectedCliente" name="food">
+      <mat-label>CLIENTE</mat-label>
+      <mat-select [(ngModel)]="selectedCliente" name="clientes">
         <mat-option>Nenhum</mat-option>
         <mat-option *ngFor="let sel of selected" [value]="sel.chave">
           {{sel.valor}}
@@ -12,6 +12,18 @@
       </mat-select>
     </mat-form-field>
     <p> Cliente Selecionado: {{selectedCliente}} </p>
+
+    <mat-form-field>
+      <mat-label>SERVIÇOS</mat-label>
+      <mat-select [(ngModel)]="selectedServicosName" name="servicos">
+        <mat-option>Nenhum</mat-option>
+        <mat-option *ngFor="let selserv of selectedServicos" [value]="selserv.chave">
+          {{selserv.valor}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <p> Serviço Selecionado: {{selectedServicosName}} </p>
+
 
     <button mat-raised-button color="primary" (click)="fetchValoresMensaisInfraestrutura()">Buscar</button>
 
