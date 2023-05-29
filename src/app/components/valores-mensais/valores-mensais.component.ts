@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ValoresMensais, Pagination } from 'src/app/models/valores-mensais';
 import { ValoresMensaisService } from 'src/app/services/valores-mensais.service';
 import { PageEvent } from '@angular/material/paginator';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { FormControl } from '@angular/forms';
+//import { /*MatDatepickerInputEvent*/MatDatepickerModule } from '@angular/material/datepicker';
+import { FormGroup, FormControl } from '@angular/forms';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { ServicosService } from 'src/app/services/servicos.service';
+import {  DateRange, MatDatepicker } from '@angular/material/datepicker';
+//import { MatDatepickerRangeValue } from '@angular/material/datepicker';
+
+import {NgIf, JsonPipe} from '@angular/common';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatNativeDateModule} from '@angular/material/core';
 
 @Component({
   selector: 'app-valores-mensais',
@@ -24,6 +31,13 @@ export class ValoresMensaisComponent {
   // variaveis pro filtro
   nrCliente: number | null = null; // número pra teste
   cdServico: number | null = null;
+  dtCompetenciaMin : string | null = null;
+  dtCompetenciaMax : string | null = null;
+  dtCargaMin : string | null = null;
+  dtCargaMax : string | null = null;
+
+  rangeFormCompetencia: FormGroup;
+  rangeFormCarga: FormGroup;
 
   // variáveis de campos pro filtro de Clientes
   selectedValue: string | null = null;
@@ -36,8 +50,18 @@ export class ValoresMensaisComponent {
   selectedServicos: any;
 
   // variáveis de campos pro filtro de datas
+  //  DtCompetencia: any;
+@ViewChild('DtCompetencia') DtCompetencia!: MatDatepicker<any>;
   selectedDtCompetenciaMin: Date | null = null; // 2023-02-28
   selectedDtCompetenciaMax: Date | null = null;
+  selectedDateRange: DateRange<Date> | null = null;
+
+  // variáveis de campos pro filtro de datas
+  //  DtCompetencia: any;
+@ViewChild('DtCarga') DtCarga!: MatDatepicker<any>;
+  selectedDtCargaMin: Date | null = null; // 2023-02-28
+  selectedDtCargaMax: Date | null = null;
+  selectedCargaDateRange: DateRange<Date> | null = null;
 
   // colunas da tabela que serão mostradas
   displayedColumns: string[] = ['nomeCliente', 'dtCompetencia', 'descServicos', 'qtdServico', 'valorServico', 'qtdDesc', 'valorDesc', 'dtcarga'];
@@ -48,7 +72,18 @@ export class ValoresMensaisComponent {
   // Construtor pra chamar o Service dos Valores Mensais, montar o dados do filtro usando os outros Services
   constructor(private api: ValoresMensaisService, 
               private apiClientesService:ClienteService, 
-              private apiServicosService: ServicosService) {}
+              private apiServicosService: ServicosService) {
+
+                this.rangeFormCompetencia = new FormGroup({
+                  start: new FormControl<Date | null>(null),
+                  end: new FormControl<Date | null>(null)
+                });
+
+                this.rangeFormCarga = new FormGroup({
+                  start: new FormControl<Date | null>(null), 
+                  end: new FormControl<Date | null>(null)
+                });
+              }
 
   ngOnInit(): void {
 //    console.log("Componente dos Valores Mensais");
@@ -58,8 +93,8 @@ export class ValoresMensaisComponent {
     this.fetchValoresMensaisInfraestrutura();
     this.selected = this.gerarValoresClientes();
     this.selectedServicos = this.gerarValoresServicos();
-    console.log("SELECTED CLIENTES: ",this.selected);
-    console.log("SELECTED SERVICOS: ",this.selectedServicos);
+//    console.log("SELECTED CLIENTES: ",this.selected);
+//    console.log("SELECTED SERVICOS: ",this.selectedServicos);
   }
 
 
@@ -109,6 +144,66 @@ export class ValoresMensaisComponent {
       });
     }
 
+    // Test for datepicker, if is not null then add to object, if not don't get in
+    if(this.rangeFormCompetencia.controls['start'].value && this.rangeFormCompetencia.controls['start'].value !== null) {
+      this.dtCompetenciaMin = this.rangeFormCompetencia.controls['start'].value.toLocaleDateString('sv');
+//      console.log('Data retornou: ',this.rangeFormCompetencia.controls['start'].value.toLocaleDateString('sv'));
+    } else {
+//      console.log('Data VAZIA retornou: ',this.rangeFormCompetencia.controls['start'].value); 
+      this.dtCompetenciaMin = null;
+    }
+
+    if (this.dtCompetenciaMin !== undefined && this.dtCompetenciaMin !== null) {
+      Object.assign(params, {
+        dtCompetenciaMin: String(this.dtCompetenciaMin)
+      });
+    }
+
+    if(this.rangeFormCompetencia.controls['end'].value && this.rangeFormCompetencia.controls['end'].value !== null) {
+      this.dtCompetenciaMax = this.rangeFormCompetencia.controls['end'].value.toLocaleDateString('sv');
+//      console.log('Data retornou: ',this.rangeFormCompetencia.controls['end'].value.toLocaleDateString('sv'));
+    } else {
+//      console.log('Data VAZIA retornou: ',this.rangeFormCompetencia.controls['end'].value); 
+      this.dtCompetenciaMax = null;
+    }
+
+    if (this.dtCompetenciaMax !== undefined && this.dtCompetenciaMax !== null) {
+      Object.assign(params, {
+        dtCompetenciaMax: String(this.dtCompetenciaMax)
+      });
+    }
+    // END tests and assign for competencia's datepicker
+
+    // START tests and assign for carga's datepicker
+    if(this.rangeFormCarga.controls['start'].value && this.rangeFormCarga.controls['start'].value !== null) {
+      console.log('Data retornou: ',this.rangeFormCarga.controls['start'].value.toLocaleDateString('sv'));
+      this.dtCargaMin = this.rangeFormCarga.controls['start'].value.toLocaleDateString('sv');
+    } else {
+      console.log('Data VAZIA retornou: ',this.rangeFormCarga.controls['start'].value); 
+      this.dtCargaMin = null;
+    }
+    
+    if(this.dtCargaMin !== undefined && this.dtCargaMin !== null) {
+      Object.assign(params, {
+        dtCargaMin: String(this.dtCargaMin)
+      })
+    }
+    
+    if(this.rangeFormCarga.controls['end'].value && this.rangeFormCarga.controls['end'].value !== null) {
+      console.log('Data retornou: ',this.rangeFormCarga.controls['end'].value.toLocaleDateString('sv'));
+      this.dtCargaMax = this.rangeFormCarga.controls['end'].value.toLocaleDateString('sv');
+    } else {
+      console.log('Data VAZIA retornou: ',this.rangeFormCarga.controls['end'].value); 
+      this.dtCargaMax = null;
+    }
+    
+    if(this.dtCargaMax !== undefined && this.dtCargaMax !== null) {
+      Object.assign(params, {
+        dtCargaMax: String(this.dtCargaMax)
+      })
+    }
+    // END tests and assign for carga's datepicker
+    
 
     this.api.getValoresMensaisInfraestrutura(params)
     .subscribe(
@@ -142,10 +237,11 @@ export class ValoresMensaisComponent {
   }
 
   // Capturar os eventos de seleção de data no Material DatePicker
+  /*
   addEventDate(type: string, event: MatDatepickerInputEvent<Date>) {
     this.filtroDtCompetencia.setValue(event.value);
   }
-
+  */
   // function to create a select for the clientes in the filter
   gerarValoresClientes(): any {
     const selected: { chave: number; valor: string; }[] = [];
@@ -192,7 +288,20 @@ export class ValoresMensaisComponent {
       }
     });
     return selected;
+  }
 
+  clearFilter() {
+    this.selectedServicosName = 'Nenhum';
+    this.selectedCliente = 'Nenhum';
+    this.rangeFormCompetencia.patchValue({
+      start: null,
+      end: null
+    });
+    this.rangeFormCarga.patchValue({
+      start: null,
+      end: null
+    });
+    this.fetchValoresMensaisInfraestrutura();
   }
 
 }

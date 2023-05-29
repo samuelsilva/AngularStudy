@@ -20,9 +20,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { FormsModule } from '@angular/forms';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+
 
 import { HomeComponent } from './home/home.component';
 import { ValoresMensaisComponent } from './components/valores-mensais/valores-mensais.component';
@@ -51,7 +53,10 @@ import { ValoresMensaisComponent } from './components/valores-mensais/valores-me
     MatTableModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatInputModule,
     MatDatepickerModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
     FormsModule
   ],
   providers: [ClienteService,ServicosService],

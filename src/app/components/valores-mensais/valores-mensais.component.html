@@ -2,7 +2,9 @@
 
   <div>
 
-    <mat-form-field>
+    <h2>FILTRO DE BUSCA</h2>
+
+    <mat-form-field class="custom-field-spacing">
       <mat-label>CLIENTE</mat-label>
       <mat-select [(ngModel)]="selectedCliente" name="clientes">
         <mat-option>Nenhum</mat-option>
@@ -11,9 +13,8 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <p> Cliente Selecionado: {{selectedCliente}} </p>
-
-    <mat-form-field>
+ 
+    <mat-form-field class="custom-field-spacing">
       <mat-label>SERVIÇOS</mat-label>
       <mat-select [(ngModel)]="selectedServicosName" name="servicos">
         <mat-option>Nenhum</mat-option>
@@ -22,26 +23,48 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <p> Serviço Selecionado: {{selectedServicosName}} </p>
 
-
-    <button mat-raised-button color="primary" (click)="fetchValoresMensaisInfraestrutura()">Buscar</button>
 
 <!--
     <mat-form-field>
-      <input matInput [matDatePicker]="DtCompetencia" placeholder="Data Competência" [(ngModel)]="filtroDtCompetencia">
-      <mat-datepicker-toggle matSuffix [for]="pickerDtCompetencia"></mat-datepicker-toggle>
-      <mat-datepicker #pickerDtCompetencia></mat-datepicker>
+      <input matInput [matDatepicker]="DtCompetencia" placeholder="Data Competência" [(ngModel)]="selectedDtCompetenciaMin">
+      <mat-datepicker-toggle matSuffix [for]="DtCompetencia"></mat-datepicker-toggle>
+      <mat-datepicker #DtCompetencia></mat-datepicker>
     </mat-form-field>
-  
-    <mat-form-field>
-      <input matInput [matDatePicker]="pickerRange" placeholder="Data Competência" [rangeFilter]="dateFilter">
-      <mat-datepicker-toggle matSuffix [for]="pickerRange"></mat-datepicker-toggle>
-      <mat-datepicker #pickerRange></mat-datepicker>
-    </mat-form-field>
+  -->
+<mat-form-field class="custom-field-spacing">
+  <mat-label>Período de Competência</mat-label>
+  <mat-date-range-input [formGroup]="rangeFormCompetencia" [rangePicker]="picker" >
+    <input matStartDate formControlName="start" placeholder="Data Competência - Início">
+    <input matEndDate formControlName="end" placeholder="Data Competência - Fim">
+  </mat-date-range-input>
+  <!--<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-hint>DD/MM/YYYY - DD/MM/YYYY</mat-hint>-->
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</mat-form-field>
 
+<mat-form-field class="custom-field-spacing">
+  <mat-label>Período da Carga</mat-label>
+  <mat-date-range-input [formGroup]="rangeFormCarga" [rangePicker]="pickerCarga" >
+    <input matStartDate formControlName="start" placeholder="Data Carga - Início">
+    <input matEndDate formControlName="end" placeholder="Data Carga - Fim">
+  </mat-date-range-input>
+  <!--<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-hint>DD/MM/YYYY - DD/MM/YYYY</mat-hint>-->
+  <mat-datepicker-toggle matIconSuffix [for]="pickerCarga"></mat-datepicker-toggle>
+  <mat-date-range-picker #pickerCarga></mat-date-range-picker>
+</mat-form-field>
+<p></p>
+<!--
+<p> Cliente Selecionado: {{selectedCliente}} </p>
+<p> Serviço Selecionado: {{selectedServicosName}} </p>
+<p> Data Selecionada: {{ rangeForm.value  | json }} </p>
+-->
+<button mat-raised-button color="primary" (click)="fetchValoresMensaisInfraestrutura()" class="custom-field-spacing">Buscar</button>
+<button mat-raised-button color="primary" (click)="clearFilter()">Limpar Filtro</button>
 
--->    
+<p></p>
 
   </div>
 
