@@ -9,7 +9,8 @@ import { ValoresMensaisComponent } from './components/valores-mensais/valores-me
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'clientes', component: ClientesComponent },
+ //   { path: 'clientes', component: ClientesComponent },
+    { path: 'clientes', loadChildren: () => import('./modules/clientes/clientes.module').then(m => m.ClientesModule) },  
     { path: 'servicos', component: ServicosComponent },
     { path: 'consolidados', component: ValoresMensaisComponent },
     /*

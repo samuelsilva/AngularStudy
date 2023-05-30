@@ -6,7 +6,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BootstrapComponent } from './components/bootstrap/bootstrap.component';
 import { ClienteService } from './services/cliente.service';
-import { ClientesComponent } from './components/clientes/clientes.component';
+//import { ClientesComponent } from './components/clientes/clientes.component';
+import { ClientesModule } from './modules/clientes/clientes.module';
+
+
 import { ServicosComponent } from './components/servicos/servicos.component';
 import { ServicosService } from './services/servicos.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,7 +36,7 @@ import { ValoresMensaisComponent } from './components/valores-mensais/valores-me
   declarations: [
     AppComponent,
     BootstrapComponent,
-    ClientesComponent,
+//    ClientesComponent,
     ServicosComponent,
     MainNavComponent,
     HomeComponent,
@@ -57,7 +60,8 @@ import { ValoresMensaisComponent } from './components/valores-mensais/valores-me
     MatDatepickerModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ClientesModule
   ],
   providers: [ClienteService,ServicosService],
   bootstrap: [AppComponent]
