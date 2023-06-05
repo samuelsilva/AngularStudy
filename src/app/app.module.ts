@@ -6,12 +6,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BootstrapComponent } from './components/bootstrap/bootstrap.component';
 import { ClienteService } from './services/cliente.service';
-//import { ClientesComponent } from './components/clientes/clientes.component';
-import { ClientesModule } from './modules/clientes/clientes.module';
-
-
-import { ServicosComponent } from './components/servicos/servicos.component';
 import { ServicosService } from './services/servicos.service';
+
+// Changes for apply lazyload
+//import { ClientesComponent } from './components/clientes/clientes.component';
+//import { ServicosComponent } from './components/servicos/servicos.component';
+
+
+import { ClientesModule } from './modules/clientes/clientes.module';
+import { ServicosModule } from './modules/servicos/servicos.module';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -31,16 +35,21 @@ import { MatNativeDateModule } from '@angular/material/core';
 
 import { HomeComponent } from './home/home.component';
 import { ValoresMensaisComponent } from './components/valores-mensais/valores-mensais.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
     AppComponent,
     BootstrapComponent,
 //    ClientesComponent,
-    ServicosComponent,
+//    ServicosComponent,
     MainNavComponent,
     HomeComponent,
-    ValoresMensaisComponent
+    ValoresMensaisComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +70,11 @@ import { ValoresMensaisComponent } from './components/valores-mensais/valores-me
     MatNativeDateModule,
     ReactiveFormsModule,
     FormsModule,
-    ClientesModule
+    ClientesModule,
+    ServicosModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule
   ],
   providers: [ClienteService,ServicosService],
   bootstrap: [AppComponent]
